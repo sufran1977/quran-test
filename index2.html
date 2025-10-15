@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>📖 اختبار حفظ النصوص – إعداد المعلم عبد الله بن حسين القحطاني</title>
+<style>
+  :root{
+    --bg:#f7f7fb; --fg:#1f2937; --muted:#6b7280; --brand:#2b3a55; --accent:#e3b04b;
+    --ok:#16a34a; --bad:#ef4444; --link:#2563eb;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:"Tajawal","Segoe UI",system-ui,-apple-system,sans-serif}
+  header{padding:24px 16px;text-align:center}
+  h1{margin:0 0 6px;font-size:28px;color:var(--brand)}
+  .sub{color:var(--muted);font-size:15px}
+  .wrap{max-width:900px;margin:0 auto;padding:0 16px 28px}
+  .card{background:#fff;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.06);padding:20px;margin:14px auto}
+  textarea{width:100%;min-height:160px;resize:vertical;direction:rtl;border:1px solid #e5e7eb;border-radius:10px;padding:12px;font-size:16px}
+  .row{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+  .field{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px}
+  .field label{white-space:nowrap;color:var(--muted);font-size:14px}
+  .field input{width:90px;text-align:center;border:1px solid #e5e7eb;border-radius:8px;padding:6px 8px;font-size:15px}
+  .actions{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+  button{border:none;border-radius:10px;padding:10px 16px;font-size:16px;cursor:pointer}
+  .primary{background:var(--brand);color:#fff}
+  .ghost{background:#fff;border:1px solid #e5e7eb;color:var(--fg)}
+  .accent{background:var(--accent);}
+  .ok{background:var(--ok);color:#fff}
+  .bad{background:var(--bad);color:#fff}
+  .center{text-align:center}
+  .big{font-size:20px}
+  .muted{color:var(--muted)}
+  .timer{font-weight:700;color:var(--brand);font-size:18px;margin-bottom:8px}
+  .q-meta{font-size:14px;color:var(--muted);margin-top:6px}
+  .hidden-ellipses{color:#9ca3af}
+  .grid{display:grid;gap:10px}
+  #startView, #quizView, #resultView{display:none}
+  #quizText{line-height:2}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📖 اختبار حفظ النصوص</h1>
+  <div class="sub">من إعداد المعلم <b>عبد الله بن حسين القحطاني</b> – مدرسة المجيدية الثانوية بالقطيف</div>
+</header>
+
+<div class="wrap">
+
+  <!-- الإعدادات -->
+  <section id="startView" class="card">
+    <div class="grid">
+      <label class="muted">ألصق النص المراد اختباره:</label>
+      <textarea id="inputText" placeholder="ضع هنا الآيات أو النص الأدبي المراد الاختبار منه..."></textarea>
+
+      <div class="row">
+        <div class="field">
+          <label for="prefix">عدد كلمات السؤال</label>
+          <input id="prefix" type="number" value="10" min="1" />
+        </div>
+        <div class="field">
+          <label for="suffix">عدد كلمات الإجابة</label>
+          <input id="suffix" type="number" value="5" min="1" />
+        </div>
+        <div class="field">
+          <label for="cardsCount">عدد الأسئلة</label>
+          <input id="cardsCount" type="number" value="10" min="1" />
+        </div>
+        <div class="field">
+          <label for="timerSec">مدة السؤال بالثواني ⏱️</label>
+          <input id="timerSec" type="number" value="20" min="5" />
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="startBtn" class="primary">ابدأ الاختبار</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- شاشة السؤال -->
+  <section id="quizView" class="card center">
+    <div id="timer" class="timer">⏳ الوقت المتبقي: <span id="remaining">--</span> ثانية</div>
+    <div id="quizText" class="big"></div>
+    <div class="q-meta" id="progressText"></div>
+
+    <div class="actions" style="justify-content:center;margin-top:16px;">
+      <button id="flipBtn" class="accent">أظهر الإجابة</button>
+    </div>
+
+    <div id="answerArea" style="display:none; margin-top:10px;">
+      <div id="answerText" class="big"></div>
+      <div class="actions" style="justify-content:center;margin-top:12px;">
+        <button id="correctBtn" class="ok">✅ صواب</button>
+        <button id="wrongBtn" class="bad">❌ خطأ</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- النتيجة -->
+  <section id="resultView" class="card center">
+    <h2 id="finalScore" class="big" style="margin-top:0"></h2>
+    <div class="muted" style="margin-bottom:14px;">تم الاختبار بنجاح – من إعداد المعلم عبد الله بن حسين القحطاني</div>
+    <div class="actions" style="justify-content:center;">
+      <button id="restartBtn" class="ghost">🔁 إعادة الاختبار</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* عناصر DOM */
+const startView    = document.getElementById('startView');
+const quizView     = document.getElementById('quizView');
+const resultView   = document.getElementById('resultView');
+
+const inputTextEl  = document.getElementById('inputText');
+const prefixEl     = document.getElementById('prefix');
+const suffixEl     = document.getElementById('suffix');
+const cardsEl      = document.getElementById('cardsCount');
+const timerSecEl   = document.getElementById('timerSec');
+
+const startBtn     = document.getElementById('startBtn');
+
+const quizText     = document.getElementById('quizText');
+const progressText = document.getElementById('progressText');
+const remainingEl  = document.getElementById('remaining');
+const flipBtn      = document.getElementById('flipBtn');
+
+const answerArea   = document.getElementById('answerArea');
+const answerText   = document.getElementById('answerText');
+const correctBtn   = document.getElementById('correctBtn');
+const wrongBtn     = document.getElementById('wrongBtn');
+
+const finalScore   = document.getElementById('finalScore');
+const restartBtn   = document.getElementById('restartBtn');
+
+/* حالة التطبيق */
+let words = [];
+let prefix = 10, suffix = 5, totalCards = 10, timerSeconds = 20;
+let indices = [];       // مواقع البداية العشوائية
+let current = 0;        // رقم السؤال الحالي
+let correct = 0;        // عدد الإجابات الصحيحة
+
+/* المؤقّت */
+let remaining = 0;
+let intervalId = null;
+let paused = false;     // يوقَف عند إظهار الإجابة
+
+function show(view){
+  startView.style.display  = (view==='start')  ? 'block' : 'none';
+  quizView.style.display   = (view==='quiz')   ? 'block' : 'none';
+  resultView.style.display = (view==='result') ? 'block' : 'none';
+}
+
+/* بدء التطبيق */
+show('start');
+
+/* زر البدء */
+startBtn.onclick = () => {
+  const text = (inputTextEl.value || '').trim();
+  if (!text) { alert('الرجاء إدخال النص أولًا.'); return; }
+
+  words = text.split(/\s+/);
+  prefix = parseInt(prefixEl.value || '10', 10);
+  suffix = parseInt(suffixEl.value || '5', 10);
+  totalCards = parseInt(cardsEl.value || '10', 10);
+  timerSeconds = parseInt(timerSecEl.value || '20', 10);
+
+  if (words.length < prefix + suffix + 1) {
+    alert('النص قصير جدًا بالنسبة للإعدادات الحالية.');
+    return;
+  }
+
+  // توليد بدايات عشوائية دون تجاوز نهاية النص
+  indices = [];
+  const maxStart = words.length - (prefix + suffix);
+  const need = Math.min(totalCards, Math.max(1, maxStart));
+  while (indices.length < need) {
+    const r = Math.floor(Math.random() * maxStart);
+    if (!indices.includes(r)) indices.push(r);
+  }
+
+  current = 0; correct = 0;
+  show('quiz');
+  renderCard();
+};
+
+/* عرض السؤال الحالي */
+function renderCard(){
+  // تحضير النص
+  const i = indices[current];
+  const head = words.slice(i, i + prefix).join(' ');
+  const tail = words.slice(i + prefix, i + prefix + suffix).join(' ');
+
+  // نص السؤال
+  quizText.innerHTML = `<b>${head}</b> <span class="hidden-ellipses">…</span>`;
+  // نص الإجابة الصحيحة
+  answerText.textContent = tail;
+
+  // واجهة
+  answerArea.style.display = 'none';
+  progressText.textContent = `السؤال ${current + 1} من ${indices.length}`;
+
+  // مؤقّت
+  stopTimer();
+  remaining = timerSeconds;
+  paused = false;
+  updateTimerUI();
+  startTimer();
+}
+
+/* تشغيل المؤقّت */
+function startTimer(){
+  stopTimer();
+  intervalId = setInterval(() => {
+    if (paused) return;
+    remaining--;
+    if (remaining <= 0) {
+      remaining = 0;
+      updateTimerUI();
+      // ينتقل تلقائيًا للسؤال التالي عند انتهاء الوقت
+      nextCard();
+      return;
+    }
+    updateTimerUI();
+  }, 1000);
+}
+
+/* إيقاف المؤقّت */
+function stopTimer(){
+  if (intervalId) {
+    clearInterval(intervalId);
+    intervalId = null;
+  }
+}
+
+/* تحديث واجهة المؤقّت */
+function updateTimerUI(){
+  remainingEl.textContent = remaining.toString();
+}
+
+/* زر إظهار الإجابة */
+flipBtn.onclick = () => {
+  answerArea.style.display = 'block';
+  paused = true; // إيقاف العدّ أثناء عرض الإجابة
+};
+
+/* تسجيل صواب/خطأ */
+correctBtn.onclick = () => { correct++; nextCard(); };
+wrongBtn.onclick   = () => { nextCard(); };
+
+/* الانتقال للسؤال التالي أو إنهاء الجلسة */
+function nextCard(){
+  stopTimer();
+  current++;
+  if (current < indices.length) {
+    renderCard();
+  } else {
+    finish();
+  }
+}
+
+/* إنهاء الجلسة */
+function finish(){
+  show('result');
+  finalScore.textContent = `النتيجة: ${correct} من ${indices.length}`;
+}
+
+/* إعادة الاختبار */
+restartBtn.onclick = () => {
+  show('start');
+};
+</script>
+
+</body>
+</html>
