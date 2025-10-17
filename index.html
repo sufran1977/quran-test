@@ -2,276 +2,380 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>📖 اختبار حفظ النصوص – إعداد المعلم عبد الله بن حسين القحطاني</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>📖 اختبار حفظ القرآن الكريم – الصف الأول الثانوي (الفصل الدراسي الأول)</title>
 <style>
   :root{
-    --bg:#f7f7fb; --fg:#1f2937; --muted:#6b7280; --brand:#2b3a55; --accent:#e3b04b;
-    --ok:#16a34a; --bad:#ef4444; --link:#2563eb;
+    --bg:#eaf4ec;            /* أخضر فاتح بلون المصحف المدرسي */
+    --fg:#1f2937;
+    --green:#197a3a;         /* أخضر داكن للعناوين والأزرار والمؤقت */
+    --green-soft:#2aa15a;
+    --card:#ffffff;
+    --muted:#6b7280;
+    --shadow:0 10px 24px rgba(0,0,0,.08);
+    --ok:#16a34a; --bad:#ef4444; --accent:#e3b04b;
   }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--fg);font-family:"Tajawal","Segoe UI",system-ui,-apple-system,sans-serif}
-  header{padding:24px 16px;text-align:center}
-  h1{margin:0 0 6px;font-size:28px;color:var(--brand)}
-  .sub{color:var(--muted);font-size:15px}
-  .wrap{max-width:900px;margin:0 auto;padding:0 16px 28px}
-  .card{background:#fff;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.06);padding:20px;margin:14px auto}
-  textarea{width:100%;min-height:160px;resize:vertical;direction:rtl;border:1px solid #e5e7eb;border-radius:10px;padding:12px;font-size:16px}
-  .row{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
-  .field{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px}
-  .field label{white-space:nowrap;color:var(--muted);font-size:14px}
-  .field input{width:90px;text-align:center;border:1px solid #e5e7eb;border-radius:8px;padding:6px 8px;font-size:15px}
-  .actions{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
-  button{border:none;border-radius:10px;padding:10px 16px;font-size:16px;cursor:pointer}
-  .primary{background:var(--brand);color:#fff}
-  .ghost{background:#fff;border:1px solid #e5e7eb;color:var(--fg)}
-  .accent{background:var(--accent);}
-  .ok{background:var(--ok);color:#fff}
-  .bad{background:var(--bad);color:#fff}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:"Amiri","Noto Naskh Arabic",system-ui,-apple-system,"Segoe UI",sans-serif}
+  header{padding:22px 16px;text-align:center}
+  h1{margin:0 0 6px;font-size:26px;color:var(--green)}
+  .sub{color:var(--muted)}
+  .wrap{max-width:960px;margin:0 auto;padding:0 16px 28px}
+  .card{background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:20px;margin:14px auto}
   .center{text-align:center}
-  .big{font-size:20px}
-  .muted{color:var(--muted)}
-  .timer{font-weight:700;color:var(--brand);font-size:18px;margin-bottom:8px}
-  .q-meta{font-size:14px;color:var(--muted);margin-top:6px}
-  .hidden-ellipses{color:#9ca3af}
-  .grid{display:grid;gap:10px}
-  #startView, #quizView, #resultView{display:none}
-  #quizText{line-height:2}
+  .btn{border:none;border-radius:12px;padding:12px 18px;font-size:16px;cursor:pointer}
+  .btn-green{background:var(--green);color:#fff}
+  .btn-green-soft{background:var(--green-soft);color:#fff}
+  .btn-ghost{background:#fff;border:1px solid #e5e7eb;color:var(--fg)}
+  .btn-accent{background:var(--accent)}
+  .btn-ok{background:var(--ok);color:#fff}
+  .btn-bad{background:var(--bad);color:#fff}
+  .grid{display:grid;gap:12px}
+  .grid-2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+  .note{color:var(--muted);font-size:14px}
+  .timer{font-weight:700;color:var(--green);font-size:18px;margin-bottom:10px}
+  .big{font-size:20px;line-height:2}
+  .hidden-ellipses{color:#94a3b8}
+  .pill{display:inline-block;background:#fff;border:1px solid #d1d5db;color:var(--green);border-radius:999px;padding:6px 10px;font-size:13px}
+  #introView, #selectView, #quizView, #resultView{display:none}
+  .ck{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:12px}
+  .ck input{width:20px;height:20px}
+  .list{list-style:none;padding:0;margin:0}
+  .list li{margin:6px 0}
 </style>
 </head>
 <body>
 
 <header>
-  <h1>📖 اختبار حفظ النصوص</h1>
+  <h1>📖 اختبار حفظ القرآن الكريم – الصف الأول الثانوي (الفصل الدراسي الأول)</h1>
   <div class="sub">من إعداد المعلم <b>عبد الله بن حسين القحطاني</b> – مدرسة المجيدية الثانوية بالقطيف</div>
 </header>
 
 <div class="wrap">
 
-  <!-- الإعدادات -->
-  <section id="startView" class="card">
+  <!-- صفحة الشرح -->
+  <section id="introView" class="card">
+    <div class="center" style="font-size:42px;line-height:1;margin-bottom:10px;">📗</div>
+    <h2 class="center" style="margin-top:0;color:var(--green)">طريقة استخدام الاختبار</h2>
     <div class="grid">
-      <label class="muted">ألصق النص المراد اختباره:</label>
-      <textarea id="inputText" placeholder="ضع هنا الآيات أو النص الأدبي المراد الاختبار منه..."></textarea>
-
-      <div class="row">
-        <div class="field">
-          <label for="prefix">عدد كلمات السؤال</label>
-          <input id="prefix" type="number" value="10" min="1" />
-        </div>
-        <div class="field">
-          <label for="suffix">عدد كلمات الإجابة</label>
-          <input id="suffix" type="number" value="5" min="1" />
-        </div>
-        <div class="field">
-          <label for="cardsCount">عدد الأسئلة</label>
-          <input id="cardsCount" type="number" value="10" min="1" />
-        </div>
-        <div class="field">
-          <label for="timerSec">مدة السؤال بالثواني ⏱️</label>
-          <input id="timerSec" type="number" value="20" min="5" />
-        </div>
-      </div>
-
-      <div class="actions">
-        <button id="startBtn" class="primary">ابدأ الاختبار</button>
-      </div>
+      <p>هذا التطبيق يساعدك على مراجعة حفظك لمقاطع المقرر. عند بدء الاختبار ستظهر لك مجموعة كلمات من المقطع المختار، والمطلوب أن <b>تُكمل ثلاث كلمات</b> من حفظك خلال <b>20 ثانية</b>.</p>
+      <ul>
+        <li>بعد أن تقول إجابتك شفهيًا، اضغط <b>«أظهر الإجابة»</b> لترى النص الصحيح.</li>
+        <li>قارن إجابتك ثم اختر: <b>✅ صواب</b> أو <b>❌ خطأ</b>.</li>
+        <li>بعد آخر سؤال ستظهر لك <b>النتيجة النهائية</b>، ويمكنك إعادة المحاولة.</li>
+      </ul>
+      <div class="note">تذكير: المطلوب دائمًا <b>إكمال ثلاث كلمات</b> فقط بعد المقطع الظاهر.</div>
+    </div>
+    <div class="center" style="margin-top:14px;">
+      <button class="btn btn-green" id="goSelect">ابدأ اختيار المقطع</button>
     </div>
   </section>
 
-  <!-- شاشة السؤال -->
+  <!-- اختيار عدة مقاطع -->
+  <section id="selectView" class="card">
+    <h2 class="center" style="margin-top:0;color:var(--green)">اختر مقطعًا أو أكثر (٥ أسئلة لكل مقطع)</h2>
+
+    <div class="grid grid-2" id="checks">
+      <label class="ck"><input type="checkbox" value="hud"/><span>سورة هود (102–108)</span></label>
+      <label class="ck"><input type="checkbox" value="raad"/><span>سورة الرعد (8–13)</span></label>
+      <label class="ck"><input type="checkbox" value="ibrahim"/><span>سورة إبراهيم (42–52)</span></label>
+      <label class="ck"><input type="checkbox" value="nahl"/><span>سورة النحل (125–128)</span></label>
+      <label class="ck"><input type="checkbox" value="isra"/><span>سورة الإسراء (23–27)</span></label>
+    </div>
+
+    <div class="center" style="margin:10px 0;">
+      <span class="pill">الإعدادات ثابتة: 12 كلمة سؤال • 3 كلمات إجابة • 20 ثانية</span>
+    </div>
+
+    <div class="center" style="margin-top:10px;">
+      <button class="btn btn-green" id="startMulti">ابدأ الاختبار</button>
+    </div>
+  </section>
+
+  <!-- صفحة الاختبار -->
   <section id="quizView" class="card center">
-    <div id="timer" class="timer">⏳ الوقت المتبقي: <span id="remaining">--</span> ثانية</div>
-    <div id="quizText" class="big"></div>
-    <div class="q-meta" id="progressText"></div>
-
-    <div class="actions" style="justify-content:center;margin-top:16px;">
-      <button id="flipBtn" class="accent">أظهر الإجابة</button>
+    <div class="timer">⏳ الوقت المتبقي: <span id="remaining">--</span> ثانية</div>
+    <div id="passageTitle" class="note" style="margin-bottom:8px;"></div>
+    <div id="questionText" class="big"></div>
+    <div class="note" id="progressText" style="margin-top:6px;"></div>
+    <div style="margin-top:14px;">
+      <button id="flipBtn" class="btn btn-accent">أظهر الإجابة</button>
     </div>
-
-    <div id="answerArea" style="display:none; margin-top:10px;">
+    <div id="answerArea" style="display:none;margin-top:12px;">
       <div id="answerText" class="big"></div>
-      <div class="actions" style="justify-content:center;margin-top:12px;">
-        <button id="correctBtn" class="ok">✅ صواب</button>
-        <button id="wrongBtn" class="bad">❌ خطأ</button>
+      <div style="margin-top:10px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+        <button id="correctBtn" class="btn btn-ok">✅ صواب</button>
+        <button id="wrongBtn" class="btn btn-bad">❌ خطأ</button>
       </div>
     </div>
   </section>
 
-  <!-- النتيجة -->
+  <!-- صفحة النتيجة -->
   <section id="resultView" class="card center">
-    <h2 id="finalScore" class="big" style="margin-top:0"></h2>
-    <div class="muted" style="margin-bottom:14px;">تم الاختبار بنجاح – من إعداد المعلم عبد الله بن حسين القحطاني</div>
-    <div class="actions" style="justify-content:center;">
-      <button id="restartBtn" class="ghost">🔁 إعادة الاختبار</button>
+    <h2 style="margin-top:0;color:var(--green)">نتيجتك التفصيلية</h2>
+    <ul id="breakdown" class="list"></ul>
+    <h3 id="finalScore" style="color:var(--green)"></h3>
+    <div style="color:var(--green);margin:6px 0;">🌿 <em>أحسنت! واصل المراجعة لتتقن الحفظ أكثر.</em></div>
+    <div class="note">يمكنك إعادة الاختبار لتقويم حفظك مرة أخرى.</div>
+    <div style="margin-top:14px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <button id="backToSelect" class="btn btn-ghost">🔁 العودة لاختيار المقاطع</button>
+      <button id="repeatAll" class="btn btn-green">إعادة الاختبار نفسه</button>
     </div>
   </section>
 
 </div>
 
+<!-- تنبيه انتهاء الوقت -->
+<audio id="beep">
+  <source src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" type="audio/ogg">
+</audio>
+
 <script>
+/* ===== بيانات المقاطع (بدون أرقام الآيات) ===== */
+const PASSAGES = {
+  hud: {
+    title: "سورة هود (102–108)",
+    text: `وَكَذَٰلِكَ أَخْذُ رَبِّكَ إِذَا أَخَذَ الْقُرَىٰ وَهِيَ ظَالِمَةٌ إِنَّ أَخْذَهُ أَلِيمٌ شَدِيدٌ
+إِنَّ فِي ذَٰلِكَ لَآيَةً لِمَنْ خَافَ عَذَابَ الْآخِرَةِ ذَٰلِكَ يَوْمٌ مَجْمُوعٌ لَّهُ النَّاسُ وَذَٰلِكَ يَوْمٌ مَّشْهُودٌ
+وَمَا نُؤَخِّرُهُ إِلَّا لِأَجَلٍ مَّعْدُودٍ
+يَوْمَ يَأْتِ لَا تَكَلَّمُ نَفْسٌ إِلَّا بِإِذْنِهِ فَمِنْهُمْ شَقِيٌّ وَسَعِيدٌ
+فَأَمَّا الَّذِينَ شَقُوا فَفِي النَّارِ لَهُمْ فِيهَا زَفِيرٌ وَشَهِيقٌ
+خَالِدِينَ فِيهَا مَا دَامَتِ السَّمَاوَاتُ وَالْأَرْضُ إِلَّا مَا شَاءَ رَبُّكَ إِنَّ رَبَّكَ فَعَّالٌ لِمَا يُرِيدُ
+وَأَمَّا الَّذِينَ سُعِدُوا فَفِي الْجَنَّةِ خَالِدِينَ فِيهَا مَا دَامَتِ السَّمَاوَاتُ وَالْأَرْضُ إِلَّا مَا شَاءَ رَبُّكَ عَطَاءً غَيْرَ مَجْذُوذٍ`
+  },
+  raad: {
+    title: "سورة الرعد (8–13)",
+    text: `اللَّهُ يَعْلَمُ مَا تَحْمِلُ كُلُّ أُنثَىٰ وَمَا تَغِيضُ الْأَرْحَامُ وَمَا تَزْدَادُ وَكُلُّ شَيْءٍ عِنْدَهُ بِمِقْدَارٍ
+عَالِمُ الْغَيْبِ وَالشَّهَادَةِ الْكَبِيرُ الْمُتَعَالِ
+سَوَاءٌ مِنْكُمْ مَنْ أَسَرَّ الْقَوْلَ وَمَنْ جَهَرَ بِهِ وَمَنْ هُوَ مُسْتَخْفٍ بِاللَّيْلِ وَسَارِبٌ بِالنَّهَارِ
+لَهُ مُعَقِّبَاتٌ مِنْ بَيْنِ يَدَيْهِ وَمِنْ خَلْفِهِ يَحْفَظُونَهُ مِنْ أَمْرِ اللَّهِ إِنَّ اللَّهَ لَا يُغَيِّرُ مَا بِقَوْمٍ حَتَّىٰ يُغَيِّرُوا مَا بِأَنْفُسِهِمْ وَإِذَا أَرَادَ اللَّهُ بِقَوْمٍ سُوءًا فَلَا مَرَدَّ لَهُ وَمَا لَهُمْ مِنْ دُونِهِ مِنْ وَالٍ
+هُوَ الَّذِي يُرِيكُمُ الْبَرْقَ خَوْفًا وَطَمَعًا وَيُنْشِئُ السَّحَابَ الثِّقَالَ
+وَيُسَبِّحُ الرَّعْدُ بِحَمْدِهِ وَالْمَلَائِكَةُ مِنْ خِيفَتِهِ وَيُرْسِلُ الصَّوَاعِقَ فَيُصِيبُ بِهَا مَنْ يَشَاءُ وَهُمْ يُجَادِلُونَ فِي اللَّهِ وَهُوَ شَدِيدُ الْمِحَالِ`
+  },
+  ibrahim: {
+    title: "سورة إبراهيم (42–52)",
+    text: `وَلَا تَحْسَبَنَّ اللَّهَ غَافِلًا عَمَّا يَعْمَلُ الظَّالِمُونَ إِنَّمَا يُؤَخِّرُهُمْ لِيَوْمٍ تَشْخَصُ فِيهِ الْأَبْصَارُ
+مُهْطِعِينَ مُقْنِعِي رُءُوسِهِمْ لَا يَرْتَدُّ إِلَيْهِمْ طَرْفُهُمْ وَأَفْئِدَتُهُمْ هَوَاءٌ
+وَأَنْذِرِ النَّاسَ يَوْمَ يَأْتِيهِمُ الْعَذَابُ فَيَقُولُ الَّذِينَ ظَلَمُوا رَبَّنَا أَخِّرْنَا إِلَىٰ أَجَلٍ قَرِيبٍ نُجِبْ دَعْوَتَكَ وَنَتَّبِعِ الرُّسُلَ أَوَلَمْ تَكُونُوا أَقْسَمْتُمْ مِنْ قَبْلُ مَا لَكُمْ مِنْ زَوَالٍ
+وَسَكَنْتُمْ فِي مَسَاكِنِ الَّذِينَ ظَلَمُوا أَنْفُسَهُمْ وَتَبَيَّنَ لَكُمْ كَيْفَ فَعَلْنَا بِهِمْ وَضَرَبْنَا لَكُمُ الْأَمْثَالَ
+وَقَدْ مَكَرُوا مَكْرَهُمْ وَعِنْدَ اللَّهِ مَكْرُهُمْ وَإِنْ كَانَ مَكْرُهُمْ لِتَزُولَ مِنْهُ الْجِبَالُ
+فَلَا تَحْسَبَنَّ اللَّهَ مُخْلِفَ وَعْدِهِ رُسُلَهُ إِنَّ اللَّهَ عَزِيزٌ ذُو انْتِقَامٍ
+يَوْمَ تُبَدَّلُ الْأَرْضُ غَيْرَ الْأَرْضِ وَالسَّمَاوَاتُ وَبَرَزُوا لِلَّهِ الْوَاحِدِ الْقَهَّارِ
+وَتَرَى الْمُجْرِمِينَ يَوْمَئِذٍ مُقَرَّنِينَ فِي الْأَصْفَادِ
+سَرَابِيلُهُمْ مِنْ قَطِرَانٍ وَتَغْشَىٰ وُجُوهَهُمُ النَّارُ
+لِيَجْزِيَ اللَّهُ كُلَّ نَفْسٍ مَا كَسَبَتْ إِنَّ اللَّهَ سَرِيعُ الْحِسَابِ
+هَٰذَا بَلَاغٌ لِلنَّاسِ وَلِيُنْذَرُوا بِهِ وَلِيَعْلَمُوا أَنَّمَا هُوَ إِلَٰهٌ وَاحِدٌ وَلِيَذَّكَّرَ أُولُو الْأَلْبَابِ`
+  },
+  nahl: {
+    title: "سورة النحل (125–128)",
+    text: `ادْعُ إِلَىٰ سَبِيلِ رَبِّكَ بِالْحِكْمَةِ وَالْمَوْعِظَةِ الْحَسَنَةِ وَجَادِلْهُمْ بِالَّتِي هِيَ أَحْسَنُ إِنَّ رَبَّكَ هُوَ أَعْلَمُ بِمَنْ ضَلَّ عَنْ سَبِيلِهِ وَهُوَ أَعْلَمُ بِالْمُهْتَدِينَ
+وَإِنْ عَاقَبْتُمْ فَعَاقِبُوا بِمِثْلِ مَا عُوقِبْتُمْ بِهِ وَلَئِنْ صَبَرْتُمْ لَهُوَ خَيْرٌ لِلصَّابِرِينَ
+وَاصْبِرْ وَمَا صَبْرُكَ إِلَّا بِاللَّهِ وَلَا تَحْزَنْ عَلَيْهِمْ وَلَا تَكُ فِي ضَيْقٍ مِمَّا يَمْكُرُونَ
+إِنَّ اللَّهَ مَعَ الَّذِينَ اتَّقَوْا وَالَّذِينَ هُمْ مُحْسِنُونَ`
+  },
+  isra: {
+    title: "سورة الإسراء (23–27)",
+    text: `وَقَضَىٰ رَبُّكَ أَلَّا تَعْبُدُوا إِلَّا إِيَّاهُ وَبِالْوَالِدَيْنِ إِحْسَانًا إِمَّا يَبْلُغَنَّ عِنْدَكَ الْكِبَرَ أَحَدُهُمَا أَوْ كِلَاهُمَا فَلَا تَقُلْ لَهُمَا أُفٍّ وَلَا تَنْهَرْهُمَا وَقُلْ لَهُمَا قَوْلًا كَرِيمًا
+وَاخْفِضْ لَهُمَا جَنَاحَ الذُّلِّ مِنَ الرَّحْمَةِ وَقُلْ رَبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا
+رَبُّكُمْ أَعْلَمُ بِمَا فِي نُفُوسِكُمْ إِنْ تَكُونُوا صَالِحِينَ فَإِنَّهُ كَانَ لِلْأَوَّابِينَ غَفُورًا
+وَآتِ ذَا الْقُرْبَىٰ حَقَّهُ وَالْمِسْكِينَ وَابْنَ السَّبِيلِ وَلَا تُبَذِّرْ تَبْذِيرًا
+إِنَّ الْمُبَذِّرِينَ كَانُوا إِخْوَانَ الشَّيَاطِينِ وَكَانَ الشَّيْطَانُ لِرَبِّهِ كَفُورًا`
+  }
+};
+
+/* إعدادات ثابتة */
+const prefix = 12, suffix = 3, perPassageQuestions = 5, timerSeconds = 20;
+
 /* عناصر DOM */
-const startView    = document.getElementById('startView');
-const quizView     = document.getElementById('quizView');
-const resultView   = document.getElementById('resultView');
+const introView  = document.getElementById('introView');
+const selectView = document.getElementById('selectView');
+const quizView   = document.getElementById('quizView');
+const resultView = document.getElementById('resultView');
 
-const inputTextEl  = document.getElementById('inputText');
-const prefixEl     = document.getElementById('prefix');
-const suffixEl     = document.getElementById('suffix');
-const cardsEl      = document.getElementById('cardsCount');
-const timerSecEl   = document.getElementById('timerSec');
+const goSelectBtn = document.getElementById('goSelect');
+const startMulti  = document.getElementById('startMulti');
 
-const startBtn     = document.getElementById('startBtn');
-
-const quizText     = document.getElementById('quizText');
-const progressText = document.getElementById('progressText');
-const remainingEl  = document.getElementById('remaining');
-const flipBtn      = document.getElementById('flipBtn');
-
+const questionText = document.getElementById('questionText');
 const answerArea   = document.getElementById('answerArea');
 const answerText   = document.getElementById('answerText');
-const correctBtn   = document.getElementById('correctBtn');
-const wrongBtn     = document.getElementById('wrongBtn');
+const progressText = document.getElementById('progressText');
+const remainingEl  = document.getElementById('remaining');
+const passageTitle = document.getElementById('passageTitle');
 
-const finalScore   = document.getElementById('finalScore');
-const restartBtn   = document.getElementById('restartBtn');
+const flipBtn = document.getElementById('flipBtn');
+const okBtn   = document.getElementById('correctBtn');
+const badBtn  = document.getElementById('wrongBtn');
 
-/* حالة التطبيق */
-let words = [];
-let prefix = 10, suffix = 5, totalCards = 10, timerSeconds = 20;
-let indices = [];       // مواقع البداية العشوائية
-let current = 0;        // رقم السؤال الحالي
-let correct = 0;        // عدد الإجابات الصحيحة
+const breakdown  = document.getElementById('breakdown');
+const finalScore = document.getElementById('finalScore');
+const backToSelect = document.getElementById('backToSelect');
+const repeatAll    = document.getElementById('repeatAll');
 
-/* المؤقّت */
-let remaining = 0;
-let intervalId = null;
-let paused = false;     // يوقَف عند إظهار الإجابة
+const beep = document.getElementById('beep');
 
-function show(view){
-  startView.style.display  = (view==='start')  ? 'block' : 'none';
-  quizView.style.display   = (view==='quiz')   ? 'block' : 'none';
-  resultView.style.display = (view==='result') ? 'block' : 'none';
+/* حالة الاختبار */
+let selectedKeys = [];
+let currentPassageIdx = 0;
+let currentQIdx = 0;
+let indicesMap = {};     // key -> indices array
+let wordsMap = {};       // key -> words array
+let scores = {};         // key -> {title, correct, total}
+
+/* مؤقت */
+let remaining = timerSeconds;
+let timerId = null;
+
+/* إظهار/إخفاء */
+function show(id){
+  introView.style.display  = (id==='intro')  ? 'block' : 'none';
+  selectView.style.display = (id==='select') ? 'block' : 'none';
+  quizView.style.display   = (id==='quiz')   ? 'block' : 'none';
+  resultView.style.display = (id==='result') ? 'block' : 'none';
 }
 
-/* بدء التطبيق */
-show('start');
+/* البداية */
+show('intro');
+goSelectBtn.onclick = () => show('select');
 
-/* زر البدء */
-startBtn.onclick = () => {
-  const text = (inputTextEl.value || '').trim();
-  if (!text) { alert('الرجاء إدخال النص أولًا.'); return; }
+/* بدء باختيار مقاطع متعددة */
+startMulti.onclick = () => {
+  const checked = Array.from(document.querySelectorAll('#checks input[type=checkbox]:checked'))
+                       .map(el => el.value);
+  if (checked.length === 0) {
+    alert('الرجاء اختيار مقطع واحد على الأقل.');
+    return;
+  }
+  startMultiQuiz(checked);
+};
 
-  words = text.split(/\s+/);
-  prefix = parseInt(prefixEl.value || '10', 10);
-  suffix = parseInt(suffixEl.value || '5', 10);
-  totalCards = parseInt(cardsEl.value || '10', 10);
-  timerSeconds = parseInt(timerSecEl.value || '20', 10);
+function startMultiQuiz(keys){
+  selectedKeys = keys;
+  indicesMap = {};
+  wordsMap = {};
+  scores = {};
+  currentPassageIdx = 0;
+  currentQIdx = 0;
 
-  if (words.length < prefix + suffix + 1) {
-    alert('النص قصير جدًا بالنسبة للإعدادات الحالية.');
+  // تحضير كلمات كل مقطع والمؤشرات العشوائية لكل مقطع
+  for (const k of selectedKeys){
+    const w = PASSAGES[k].text.trim().split(/\s+/);
+    wordsMap[k] = w;
+    const maxStart = Math.max(0, w.length - (prefix + suffix));
+    const need = Math.min(perPassageQuestions, maxStart); // إذا كان النص قصيرًا جدًا
+    const inds = [];
+    while (inds.length < need) {
+      const r = Math.floor(Math.random() * Math.max(1, maxStart));
+      if (!inds.includes(r)) inds.push(r);
+      if (maxStart === 0) break; // حماية للنص القصير جدًا
+    }
+    indicesMap[k] = inds;
+    scores[k] = {title: PASSAGES[k].title, correct: 0, total: inds.length};
+  }
+
+  // التحقق: هل يوجد على الأقل سؤال واحد؟
+  const totalQs = selectedKeys.reduce((s,k)=> s + indicesMap[k].length, 0);
+  if (totalQs === 0){
+    alert('النصوص المختارة قصيرة جدًا بالنسبة لإعدادات السؤال/الإجابة. الرجاء اختيار مقطع أطول أو تقليل الإعدادات (إن كانت قابلة).');
     return;
   }
 
-  // توليد بدايات عشوائية دون تجاوز نهاية النص
-  indices = [];
-  const maxStart = words.length - (prefix + suffix);
-  const need = Math.min(totalCards, Math.max(1, maxStart));
-  while (indices.length < need) {
-    const r = Math.floor(Math.random() * maxStart);
-    if (!indices.includes(r)) indices.push(r);
-  }
-
-  current = 0; correct = 0;
   show('quiz');
   renderCard();
-};
+}
 
-/* عرض السؤال الحالي */
+/* عرض سؤال */
 function renderCard(){
-  // تحضير النص
-  const i = indices[current];
+  // إذا انتهى هذا المقطع، انتقل لغيره
+  while (currentPassageIdx < selectedKeys.length &&
+         currentQIdx >= indicesMap[selectedKeys[currentPassageIdx]].length) {
+    currentPassageIdx++;
+    currentQIdx = 0;
+  }
+
+  if (currentPassageIdx >= selectedKeys.length){
+    finish();
+    return;
+  }
+
+  const k = selectedKeys[currentPassageIdx];
+  const title = PASSAGES[k].title;
+  const words = wordsMap[k];
+  const i = indicesMap[k][currentQIdx];
+
   const head = words.slice(i, i + prefix).join(' ');
   const tail = words.slice(i + prefix, i + prefix + suffix).join(' ');
 
-  // نص السؤال
-  quizText.innerHTML = `<b>${head}</b> <span class="hidden-ellipses">…</span>`;
-  // نص الإجابة الصحيحة
+  passageTitle.textContent = `المقطع: ${title}`;
+  questionText.innerHTML = `<b>${head}</b> <span class="hidden-ellipses">…</span>`;
   answerText.textContent = tail;
-
-  // واجهة
   answerArea.style.display = 'none';
-  progressText.textContent = `السؤال ${current + 1} من ${indices.length}`;
 
-  // مؤقّت
-  stopTimer();
+  // تقدّم: رقم السؤال الحالي من إجمالي أسئلة هذا المقطع
+  const cur = currentQIdx + 1;
+  const tot = indicesMap[k].length;
+  progressText.textContent = `سؤال ${cur} من ${tot} في هذا المقطع`;
+
+  // مؤقت
+  clearInterval(timerId);
   remaining = timerSeconds;
-  paused = false;
-  updateTimerUI();
-  startTimer();
+  updateTimer();
+  timerId = setInterval(tick, 1000);
 }
 
-/* تشغيل المؤقّت */
-function startTimer(){
-  stopTimer();
-  intervalId = setInterval(() => {
-    if (paused) return;
-    remaining--;
-    if (remaining <= 0) {
-      remaining = 0;
-      updateTimerUI();
-      // ينتقل تلقائيًا للسؤال التالي عند انتهاء الوقت
-      nextCard();
-      return;
-    }
-    updateTimerUI();
-  }, 1000);
-}
-
-/* إيقاف المؤقّت */
-function stopTimer(){
-  if (intervalId) {
-    clearInterval(intervalId);
-    intervalId = null;
+function tick(){
+  remaining--;
+  updateTimer();
+  if (remaining <= 0){
+    clearInterval(timerId);
+    beep.play();
+    nextCard(false); // انتهى الوقت = لا تُضاف درجة
   }
 }
+function updateTimer(){ remainingEl.textContent = remaining.toString(); }
 
-/* تحديث واجهة المؤقّت */
-function updateTimerUI(){
-  remainingEl.textContent = remaining.toString();
+flipBtn.onclick = ()=>{ answerArea.style.display='block'; clearInterval(timerId); };
+okBtn.onclick   = ()=>{ nextCard(true); };
+badBtn.onclick  = ()=>{ nextCard(false); };
+
+function nextCard(isCorrect){
+  clearInterval(timerId);
+  const k = selectedKeys[currentPassageIdx];
+  if (isCorrect) scores[k].correct++;
+  currentQIdx++;
+  renderCard();
 }
 
-/* زر إظهار الإجابة */
-flipBtn.onclick = () => {
-  answerArea.style.display = 'block';
-  paused = true; // إيقاف العدّ أثناء عرض الإجابة
-};
-
-/* تسجيل صواب/خطأ */
-correctBtn.onclick = () => { correct++; nextCard(); };
-wrongBtn.onclick   = () => { nextCard(); };
-
-/* الانتقال للسؤال التالي أو إنهاء الجلسة */
-function nextCard(){
-  stopTimer();
-  current++;
-  if (current < indices.length) {
-    renderCard();
-  } else {
-    finish();
-  }
-}
-
-/* إنهاء الجلسة */
+/* إنهاء وإظهار النتائج المفصلة */
 function finish(){
   show('result');
-  finalScore.textContent = `النتيجة: ${correct} من ${indices.length}`;
+  breakdown.innerHTML = '';
+  let totalCorrect = 0, totalQs = 0;
+
+  for (const k of selectedKeys){
+    const s = scores[k];
+    totalCorrect += s.correct;
+    totalQs += s.total;
+
+    const li = document.createElement('li');
+    li.textContent = `${s.title}: ${s.correct} من ${s.total}`;
+    breakdown.appendChild(li);
+  }
+
+  finalScore.textContent = `المجموع الكلي: ${totalCorrect} من ${totalQs}`;
 }
 
-/* إعادة الاختبار */
-restartBtn.onclick = () => {
-  show('start');
+/* إعادة */
+backToSelect.onclick = ()=> {
+  // إعادة الواجهة للاختيار
+  show('select');
 };
+repeatAll.onclick = ()=> {
+  // إعادة نفس الاختيارات بجديد من الأسئلة العشوائية
+  startMultiQuiz(selectedKeys);
+};
+
+/* بدء التطبيق على صفحة الشرح */
+show('intro');
 </script>
 
 </body>
